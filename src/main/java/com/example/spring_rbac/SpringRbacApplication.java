@@ -9,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 @EnableWebSecurity
 @EnableMongoRepositories
 public class SpringRbacApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(SpringRbacApplication.class, args);
     }

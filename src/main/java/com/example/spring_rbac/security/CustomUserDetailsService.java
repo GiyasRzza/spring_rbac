@@ -25,11 +25,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserDao user = userRepository.findByUserName(username).orElseThrow(() ->
                 new UsernameNotFoundException("UserName not found!"));
-        return  new User(user.getUserName(),user.getPassword(),mapRoleToAuthorities(user.getRole()));
 
+        List<GrantedAuthority> authorities = user.getRole().stream()
+                .map(roleDao -> new SimpleGrantedAuthority("ROLE_" + roleDao.getRoleName()))
+                .collect(Collectors.toList());
+
+        return new User(user.getUserName(), user.getPassword(), authorities);
     }
-    private Collection<GrantedAuthority> mapRoleToAuthorities(List<RoleDao> roles){
-        return roles.stream().map(roleDao -> new
-                SimpleGrantedAuthority(roleDao.getRoleName())).collect(Collectors.toList());
-    }
+
+//    private Collection<GrantedAuthority> mapRoleToAuthorities(List<RoleDao> roles){
+//        return roles.stream().map(roleDao -> new
+//                SimpleGrantedAuthority(roleDao.getRoleName())).collect(Collectors.toList());
+//    }
 }

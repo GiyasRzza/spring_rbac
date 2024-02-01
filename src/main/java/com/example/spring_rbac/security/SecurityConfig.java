@@ -1,6 +1,7 @@
 package com.example.spring_rbac.security;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,12 +14,11 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 @AllArgsConstructor
 public class SecurityConfig {
-    private CustomUserDetailsService customUserDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity security) throws Exception {
         security.csrf().disable().authorizeRequests().
-                requestMatchers("/auth/**").permitAll().
-              requestMatchers("/role").hasRole("USER")
+                requestMatchers("/api/testRole").hasRole("ADMIN").requestMatchers("/auth/**").permitAll()
                 .and().httpBasic();
     return security.build();
     }
